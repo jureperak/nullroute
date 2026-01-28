@@ -33,6 +33,11 @@ jobs:
           envsubst < infra/nginx/conf.d/default.conf.template \
             > "${{ vars.SERVER_BASE_PATH }}/nginx/conf.d/default.conf"
 
+      - name: Stop and remove old container
+        run: |
+          docker stop "${{ vars.NGINX_CONTAINER }}" || true
+          docker rm "${{ vars.NGINX_CONTAINER }}" || true
+
       - name: Recreate nginx container
         run: |
           docker rm -f "${{ vars.NGINX_CONTAINER }}" 2>/dev/null || true
