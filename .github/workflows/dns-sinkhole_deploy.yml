@@ -13,8 +13,8 @@ jobs:
     steps:
       - name: Stop and remove old container
         run: |
-          docker stop dns-sinkhole || true
-          docker rm dns-sinkhole || true
+          docker stop "${{ vars.PIHOLE_CONTAINER }}" || true
+          docker rm "${{ vars.PIHOLE_CONTAINER }}" || true
 
       - name: Run new container
         run: |
@@ -24,7 +24,7 @@ jobs:
             -p 53:53/tcp -p 53:53/udp \
             -e TZ="${{ vars.TZ }}" \
             -e FTLCONF_dns_listeningMode="${{ vars.PIHOLE_DNS_LISTENING_MODE }}" \
-            -e FTLCONF_webserver_api_password="${{ secrets.PI_HOLE_WEB_PASSWORD }}" \
+            -e FTLCONF_webserver_api_password="${{ secrets.PIHOLE_WEB_PASSWORD }}" \
             -v "${{ vars.SERVER_BASE_PATH }}/pihole/etc-pihole:/etc/pihole" \
             -v "${{ vars.SERVER_BASE_PATH }}/pihole/etc-dnsmasq.d:/etc/dnsmasq.d" \
             --restart unless-stopped \
