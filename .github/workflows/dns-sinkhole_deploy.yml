@@ -1,8 +1,6 @@
 name: Deploy dns-sinkhole
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -11,6 +9,11 @@ jobs:
     environment: Production
 
     steps:
+      - name: Ensure docker network exists
+        run: |
+          docker network inspect "${{ vars.DOCKER_NETWORK }}" >/dev/null 2>&1 || \
+          docker network create "${{ vars.DOCKER_NETWORK }}"
+          
       - name: Stop and remove old container
         run: |
           docker stop "${{ vars.PIHOLE_CONTAINER }}" || true
