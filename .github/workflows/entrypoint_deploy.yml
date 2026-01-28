@@ -20,18 +20,12 @@ jobs:
           docker network inspect "${{ vars.DOCKER_NETWORK }}" >/dev/null 2>&1 || \
           docker network create "${{ vars.DOCKER_NETWORK }}"
 
-      - name: Install nginx config (template -> conf)
+      - name: Install nginx config (envsubst)
         run: |
           mkdir -p "${{ vars.SERVER_BASE_PATH }}/nginx/conf.d"
-      
-          export SERVER_NAME="${{ vars.SERVER_NAME }}"
-          export PIHOLE_HOST="${{ vars.PIHOLE_HOST }}"
-          export PIHOLE_PORT="${{ vars.PIHOLE_PORT }}"
-          export STORE_HOST="${{ vars.STORE_HOST }}"
-          export STORE_PORT="${{ vars.STORE_PORT }}"
-          export STORE_PATH="${{ vars.STORE_PATH }}"
-      
-          envsubst < infra/nginx/conf.d/default.conf.template \
+
+          envsubst '${SERVER_NAME} ${PIHOLE_HOST} ${PIHOLE_PORT} ${STORE_HOST} ${STORE_PORT} ${STORE_PATH}' \
+            < infra/nginx/conf.d/default.conf.template \
             > "${{ vars.SERVER_BASE_PATH }}/nginx/conf.d/default.conf"
 
       - name: Stop and remove old container
