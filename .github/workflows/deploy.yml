@@ -1,0 +1,34 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    environment: Production
+
+    steps:
+      - name: Pull latest image
+        run: docker pull ghcr.io/jureperak/dns-sinkhole:latest
+
+      - name: Stop and remove old container
+        run: |
+          docker stop dns-sinkhole || true
+          docker rm dns-sinkhole || true
+
+      - name: Run new container
+        run: |
+          docker run -d \
+            --name "${{ vars.PIHOLE_CONTAINER }}" \
+            --network "${{ vars.DOCKER_NETWORK }}" \
+            -p 53:53/tcp -p 53:53/udp \
+            -e TZ="${{ vars.TZ }}" \
+            -e FTLCONF_dns_listeningMode="${{ vars.PIHOLE_DNS_LISTENING_MODE }}" \
+            -e FTLCONF_webserver_api_password="${{ secrets.PI_HOLE_WEB_PASSWORD }}" \
+            -v "${{ vars.SERVER_BASE_PATH }}/pihole/etc-pihole:/etc/pihole" \
+            -v "${{ vars.SERVER_BASE_PATH }}/pihole/etc-dnsmasq.d:/etc/dnsmasq.d" \
+            --restart unless-stopped \
+            pihole/pihole:latest
