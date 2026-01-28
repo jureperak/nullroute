@@ -11,9 +11,6 @@ jobs:
     environment: Production
 
     steps:
-      - name: Pull latest image
-        run: docker pull ghcr.io/jureperak/dns-sinkhole:latest
-
       - name: Stop and remove old container
         run: |
           docker stop dns-sinkhole || true
