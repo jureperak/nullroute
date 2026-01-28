@@ -6,29 +6,29 @@ server {
     location = /admin { return 301 /admin/; }
     location ^~ /admin/ {
         proxy_pass http://${PIHOLE_HOST}:${PIHOLE_PORT}/admin/;
-        proxy_set_header Host $$host;
-        proxy_set_header X-Real-IP $$remote_addr;
-        proxy_set_header X-Forwarded-For $$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $$scheme;
+        proxy_set_header Host ${host};
+        proxy_set_header X-Real-IP ${remote_addr};
+        proxy_set_header X-Forwarded-For ${proxy_add_x_forwarded_for};
+        proxy_set_header X-Forwarded-Proto ${scheme};
     }
 
     # Pi-hole API
     location ^~ /api/ {
         proxy_pass http://${PIHOLE_HOST}:${PIHOLE_PORT}/api/;
-        proxy_set_header Host $$host;
-        proxy_set_header X-Real-IP $$remote_addr;
-        proxy_set_header X-Forwarded-For $$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $$scheme;
+        proxy_set_header Host ${host};
+        proxy_set_header X-Real-IP ${remote_addr};
+        proxy_set_header X-Forwarded-For ${proxy_add_x_forwarded_for};
+        proxy_set_header X-Forwarded-Proto ${scheme};
     }
 
     # Store-scrapper
     location = /${STORE_PATH} { return 301 /${STORE_PATH}/; }
     location ^~ /${STORE_PATH}/ {
         proxy_pass http://${STORE_HOST}:${STORE_PORT}/;
-        proxy_set_header Host $$host;
-        proxy_set_header X-Real-IP $$remote_addr;
-        proxy_set_header X-Forwarded-For $$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $$scheme;
+        proxy_set_header Host ${host};
+        proxy_set_header X-Real-IP ${remote_addr};
+        proxy_set_header X-Forwarded-For ${proxy_add_x_forwarded_for};
+        proxy_set_header X-Forwarded-Proto ${scheme};
     }
 
     location / {
