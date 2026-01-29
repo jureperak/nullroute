@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name ${NULLROUTE_SERVER_NAME};
+    server_name ${NULLROUTE_SERVER_PREFIX}.${SERVER_NAME};
 
     location / {
         default_type text/html;
@@ -10,10 +10,10 @@ server {
 
 server {
     listen 80;
-    server_name ${PIHOLE_SERVER_NAME};
+    server_name ${PIHOLE_CONTAINER}.${SERVER_NAME};
 
     location / {
-        proxy_pass http://${PIHOLE_HOST}:${PIHOLE_PORT};
+        proxy_pass http://${PIHOLE_CONTAINER}:80;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -23,10 +23,10 @@ server {
 
 server {
     listen 80;
-    server_name ${SCRAPPER_SERVER_NAME};
+    server_name ${SCRAPPER_CONTAINER}.${SERVER_NAME};
 
     location / {
-        proxy_pass http://${SCRAPPER_HOST}:${SCRAPPER_PORT};
+        proxy_pass http://${SCRAPPER_CONTAINER}:80;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
