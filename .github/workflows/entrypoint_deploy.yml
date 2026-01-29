@@ -21,10 +21,17 @@ jobs:
           docker network create "${{ vars.DOCKER_NETWORK }}"
 
       - name: Install nginx config (envsubst)
+        env:
+          SERVER_NAME:  ${{ vars.SERVER_NAME }}
+          PIHOLE_HOST:  ${{ vars.PIHOLE_HOST }}
+          PIHOLE_PORT:  ${{ vars.PIHOLE_PORT }}
+          STORE_HOST:   ${{ vars.STORE_HOST }}
+          STORE_PORT:   ${{ vars.STORE_PORT }}
+          STORE_PATH:   ${{ vars.STORE_PATH }}
         run: |
           mkdir -p "${{ vars.SERVER_BASE_PATH }}/nginx/conf.d"
-
-          envsubst '${vars.SERVER_NAME} ${vars.PIHOLE_HOST} ${vars.PIHOLE_PORT} ${vars.STORE_HOST} ${vars.STORE_PORT} ${vars.STORE_PATH}' \
+      
+          envsubst '${SERVER_NAME} ${PIHOLE_HOST} ${PIHOLE_PORT} ${STORE_HOST} ${STORE_PORT} ${STORE_PATH}' \
             < infra/nginx/conf.d/default.conf.template \
             > "${{ vars.SERVER_BASE_PATH }}/nginx/conf.d/default.conf"
 
