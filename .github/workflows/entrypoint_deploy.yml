@@ -23,15 +23,13 @@ jobs:
       - name: Install nginx config (envsubst)
         env:
           SERVER_NAME:  ${{ vars.SERVER_NAME }}
-          PIHOLE_HOST:  ${{ vars.PIHOLE_HOST }}
-          PIHOLE_PORT:  ${{ vars.PIHOLE_PORT }}
-          STORE_HOST:   ${{ vars.STORE_HOST }}
-          STORE_PORT:   ${{ vars.STORE_PORT }}
-          STORE_PATH:   ${{ vars.STORE_PATH }}
+          NULLROUTE_SERVER_PREFIX:  ${{ vars.NULLROUTE_SERVER_PREFIX }}
+          PIHOLE_CONTAINER:  ${{ vars.PIHOLE_CONTAINER }}
+          SCRAPPER_CONTAINER:   ${{ vars.SCRAPPER_CONTAINER }}
         run: |
           mkdir -p "${{ vars.SERVER_BASE_PATH }}/nginx/conf.d"
       
-          envsubst '${SERVER_NAME} ${PIHOLE_HOST} ${PIHOLE_PORT} ${STORE_HOST} ${STORE_PORT} ${STORE_PATH}' \
+          envsubst '${SERVER_NAME} ${NULLROUTE_SERVER_PREFIX} ${PIHOLE_CONTAINER} ${SCRAPPER_CONTAINER}' \
             < infra/nginx/conf.d/default.conf.template \
             > "${{ vars.SERVER_BASE_PATH }}/nginx/conf.d/default.conf"
 
