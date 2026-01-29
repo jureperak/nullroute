@@ -47,7 +47,7 @@ jobs:
             --network "${{ vars.DOCKER_NETWORK }}" \
             -p 80:80 \
             -v "${{ vars.SERVER_BASE_PATH }}/nginx/conf.d:/etc/nginx/conf.d:ro" \
-            -v "${{ vars.SERVER_BASE_PATH }}/nginx/certs:/etc/nginx/certs:ro
+            -v "${{ vars.SERVER_BASE_PATH }}/nginx/certs:/etc/nginx/certs:ro" \
             --restart unless-stopped \
             nginx:alpine
 
