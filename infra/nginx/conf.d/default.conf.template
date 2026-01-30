@@ -28,7 +28,7 @@ server {
         proxy_read_timeout 10s;
     }
 
-    error_page 502 503 504 =200 /scrapper_unavailable.html
+    error_page 502 503 504 =200 /scrapper_unavailable.html;
 
     location = /scrapper_unavailable.html {
         internal;
