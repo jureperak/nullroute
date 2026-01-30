@@ -18,14 +18,18 @@ server {
     ssl_certificate_key /etc/nginx/certs/home-arpa-key.pem;
 
     location / {
-        proxy_pass http://${SCRAPPER_CONTAINER}:8080;
+        set $scrapper_upstream scrapper;
+        proxy_pass http://$scrapper_upstream:8080;
+
+        proxy_connect_timeout 2s;
+        proxy_read_timeout 10s;
+        proxy_next_upstream error timeout http_502 http_503 http_504;
+        proxy_next_upstream_tries 1;
+
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-
-        proxy_connect_timeout 2s;
-        proxy_read_timeout 10s;
     }
 
     error_page 502 503 504 =200 /scrapper_unavailable.html;
