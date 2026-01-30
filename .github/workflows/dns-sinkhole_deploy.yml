@@ -24,7 +24,7 @@ jobs:
           docker run -d \
             --name "${{ vars.PIHOLE_CONTAINER }}" \
             --network "${{ vars.DOCKER_NETWORK }}" \
-            -p 53:53/tcp -p 53:53/udp \
+            -p 53:53/tcp -p 53:53/udp -p 80:80 \
             -e TZ="${{ vars.TZ }}" \
             -e FTLCONF_dns_listeningMode="${{ vars.PIHOLE_DNS_LISTENING_MODE }}" \
             -e FTLCONF_webserver_api_password="${{ secrets.PIHOLE_WEB_PASSWORD }}" \
