@@ -12,6 +12,8 @@ server {
     listen 443 ssl;
     server_name ${SCRAPPER_CONTAINER}.${SERVER_NAME};
 
+    resolver 127.0.0.11 valid=10s ipv6=off;
+
     ssl_certificate     /etc/nginx/certs/home-arpa.pem;
     ssl_certificate_key /etc/nginx/certs/home-arpa-key.pem;
 
@@ -21,6 +23,17 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_connect_timeout 2s;
+        proxy_read_timeout 10s;
+    }
+
+    error_page 502 503 504 =200 /scrapper_unavailable.html
+
+    location = /scrapper_unavailable.html {
+        internal;
+        default_type text/html;
+        return 200 "<h1>Scrapper is not available at the moment</h1>";
     }
 }
 
